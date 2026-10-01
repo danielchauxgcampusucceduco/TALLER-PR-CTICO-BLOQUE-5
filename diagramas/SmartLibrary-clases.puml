@@ -1,0 +1,80 @@
+@startuml
+title SmartLibrary - Diagrama de clases (Bloque 5)
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+abstract class Usuario {
+  - identificacion: String
+  - nombre: String
+  - correo: String
+  + getNombre(): String
+}
+
+class Estudiante {
+  - codigoEstudiantil: String
+  - programaAcademico: String
+  + notificar(mensaje: String): void
+}
+
+class Bibliotecario {
+  - codigoEmpleado: String
+  - turno: String
+}
+
+interface Notificable {
+  + notificar(mensaje: String): void
+}
+
+class Libro {
+  - isbn: String
+  - titulo: String
+}
+
+class Ejemplar {
+  - codigoBarra: String
+  - estado: String
+}
+
+class Prestamo {
+  - fechaPrevistaDevolucion: LocalDate
+  - renovaciones: List<Renovacion>
+  + renovar(nuevaFecha: LocalDate): void
+  + getRenovaciones(): List<Renovacion>
+}
+
+class Renovacion {
+  - fechaRenovacion: LocalDate
+  - fechaAnterior: LocalDate
+  - nuevaFecha: LocalDate
+}
+
+class Reserva {
+  - fechaReserva: LocalDate
+  - estado: String
+}
+
+Usuario <|-- Estudiante
+Usuario <|-- Bibliotecario
+Notificable <|.. Estudiante
+
+Estudiante "1" <-- "0..*" Prestamo : realiza
+Ejemplar "1" <-- "0..*" Prestamo : corresponde a
+Libro "1" o-- "0..*" Ejemplar : posee
+Prestamo "1" *-- "0..*" Renovacion : registra
+Estudiante "1" <-- "0..*" Reserva : solicita
+Libro "1" <-- "0..*" Reserva : reserva para
+
+note right of Libro
+  Agregación: se asume que un Ejemplar
+  tiene control de inventario propio y
+  puede existir independientemente del
+  objeto Libro en una corrección o
+  reasignación de catálogo.
+end note
+
+note right of Renovacion
+  Composición: Renovacion es historial
+  exclusivo de un Prestamo; sin él no
+  tiene significado independiente.
+end note
+@enduml

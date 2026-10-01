@@ -1,0 +1,46 @@
+@startuml
+title SmartLibrary - Vista funcional de componentes (Bloque 5)
+skinparam componentStyle uml2
+left to right direction
+
+component "Gestión de Usuarios" as Usuarios {
+  [Usuario]
+  [Estudiante]
+  [Bibliotecario]
+  [Notificable]
+}
+
+component "Gestión de Catálogo" as Catalogo {
+  [Libro]
+  [Ejemplar]
+}
+
+component "Gestión de Préstamos" as Prestamos {
+  [Prestamo]
+  [Renovacion]
+}
+
+component "Gestión de Reservas" as Reservas {
+  [Reserva]
+}
+
+Prestamos ..> Usuarios : consulta prestatario
+Prestamos ..> Catalogo : consulta ejemplar
+Reservas ..> Usuarios : identifica solicitante
+Reservas ..> Catalogo : consulta libro
+Prestamos ..> Reservas : consulta disponibilidad
+
+note bottom of Usuarios
+  Clases: Usuario, Estudiante,
+  Bibliotecario, Notificable
+end note
+note bottom of Catalogo
+  Clases: Libro, Ejemplar
+end note
+note bottom of Prestamos
+  Clases: Prestamo, Renovacion
+end note
+note bottom of Reservas
+  Clase: Reserva
+end note
+@enduml
